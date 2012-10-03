@@ -139,7 +139,9 @@ class MSpecScript
   # Sets up signal handlers. Only a handler for SIGINT is
   # registered currently.
   def signals
-    if config[:abort]
+    # Only try to setup signal handlers if Signal is defined, having Signal
+    # implemented is generally a high barrier entry for Ruby VMs
+    if config[:abort] and defined? Signal
       Signal.trap "INT" do
         MSpec.actions :abort
         puts "\nProcess aborted!"
